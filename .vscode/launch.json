@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "debug index.ts",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run","dev"
+      ],
+      "cwd": "${workspaceFolder}",
+      "args": ["./src/index.ts"],
+      "internalConsoleOptions": "openOnSessionStart",
+      // 如果不想使用 vscode 内置 console，取消注释即可 
+      // "console": "externalTerminal"
+    }
+  ]
+}
