@@ -5,9 +5,9 @@
   "main": "./src/index.ts",
   "type": "module",
   "author": "YuanSunTech - Wendaolee",
-  "license":"MIT",
+  "license": "MIT",
   "scripts": {
-    "repl":"tsx ./repl.ts",
+    "repl": "tsx ./repl.ts",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --config=jest.config.ts",
     "test:cover": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --coverage",
     "clean": "rimraf dist",
@@ -38,6 +38,8 @@
     "typescript": "^5.5.2"
   },
   "dependencies": {
+    "fp-ts": "^2.16.9",
+    "io-ts": "^2.2.21",
     "rimraf": "^6.0.1",
     "tsc-alias": "^1.8.10"
   }

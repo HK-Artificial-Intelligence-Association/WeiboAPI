@@ -3,7 +3,7 @@
  */
 
 import { add } from '@/index.ts';
-import { multiply } from '@/utils/math.ts';
+import { multiply } from '@/utils/parser.ts';
 
 describe('add', () => {
     it('should return the sum of two numbers', () => {

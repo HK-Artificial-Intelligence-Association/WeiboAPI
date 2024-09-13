@@ -1,4 +1,4 @@
-import { multiply } from "@/utils/math.ts"
+import { multiply } from "@/utils/parser.ts"
 
 export function add(a: number, b: number) {
   return a + b
