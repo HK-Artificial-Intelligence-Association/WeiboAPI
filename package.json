@@ -2,7 +2,7 @@
   "name": "@hk-artificial-intelligence-association/weibo-api",
   "version": "1.0.1",
   "description": "元狲科技封装的新浪微博API",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "type": "module",
   "author": "YuanSunTech - Wendaolee",
   "license": "MIT",
