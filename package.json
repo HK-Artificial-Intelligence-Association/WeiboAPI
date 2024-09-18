@@ -1,11 +1,20 @@
 {
-  "name": "weibo-api",
+  "name": "@hk-artificial-intelligence-association/weibo-api",
   "version": "1.0.0",
   "description": "元狲科技封装的新浪微博API",
   "main": "./src/index.ts",
   "type": "module",
   "author": "YuanSunTech - Wendaolee",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HK-Artificial-Intelligence-Association/WeiboAPI.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com/",
+    "tag": "latest"
+  },
   "scripts": {
     "repl": "tsx ./repl.ts",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --config=jest.config.ts",
