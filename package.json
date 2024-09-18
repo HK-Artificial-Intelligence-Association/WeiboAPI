@@ -1,7 +1,7 @@
 {
-  "name": "node-typescript-template",
-  "version": "1.0.1",
-  "description": "元狲科技nodejs命令行程序开发模板",
+  "name": "weibo-api",
+  "version": "1.0.0",
+  "description": "元狲科技封装的新浪微博API",
   "main": "./src/index.ts",
   "type": "module",
   "author": "YuanSunTech - Wendaolee",

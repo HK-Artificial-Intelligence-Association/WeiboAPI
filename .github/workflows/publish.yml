@@ -1,0 +1,87 @@
+name: 发布仓库包
+
+on:
+  push:
+    branches:
+      - main # 只在推送到 main 分支时触发
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x' # 你可以根据需要更改 Node.js 版本
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: TSC Check
+      run: npm run type-check
+
+    - name: Test
+      run: npm run test:cover
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x' # 你可以根据需要更改 Node.js 版本
+        registry-url: 'https://npm.pkg.github.com'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Make get-version.sh executable
+      run: chmod +x ./get-version.sh
+    
+    - name: Make publish.sh executable
+      run: chmod +x ./publish.sh
+
+    - name: Make npmrc-set-up.sh executable
+      run: chmod +x ./npmrc-set-up.sh
+
+    - name: Set up npmrc
+      run: ./npmrc-set-up.sh -t ${{ secrets.GITHUB_TOKEN }} -p weibo-api -o hk-artificial-intelligence-association
+
+    - name: Get package version
+      id: get_version
+      run: ./get-version.sh
+
+    - name: TSC Check
+      run: npm run type-check
+
+    - name: Build delopy
+      run: npm run build
+
+    - name: Check if version is already published
+      id: check_version
+      run: |
+        if npm view @hk-artificial-intelligence-association/weibo-api@${{ steps.get_version.outputs.version }} version; then
+          echo "Version ${{ steps.get_version.outputs.version }} is already published."
+          echo "::set-output name=should_publish::false"
+        else
+          echo "Version ${{ steps.get_version.outputs.version }} is not published."
+          echo "::set-output name=should_publish::true"
+        fi
+
+    - name: Publish to npm
+      if: steps.check_version.outputs.should_publish == 'true'
+      run: ./publish.sh -t ${{ secrets.GITHUB_TOKEN}}

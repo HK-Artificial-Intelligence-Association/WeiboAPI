@@ -2,21 +2,15 @@
  * 对于测试单元文件，一律以 .test.ts 为后缀并且放在 test 目录下
  */
 
-import { add } from '@/index.ts';
-import { multiply } from '@/utils/parser.ts';
+import { fetchUserLatestWeiboByUID } from "@/index.ts";
 
-describe('add', () => {
-    it('should return the sum of two numbers', () => {
-        expect(add(2, 3)).toBe(5);
-        expect(add(-1, 5)).toBe(4);
-        expect(add(0, 0)).toBe(0);
+describe('fetchUserLatestWeiboByUID', () => {
+    it('should return the latest 10 weibo infos', async () => {
+        const weiboInfos = await fetchUserLatestWeiboByUID('5576168164');
+        expect(weiboInfos.length).toBeGreaterThanOrEqual(10);
     });
-});
 
-describe('multiply', () => {
-    it('should return the product of two numbers', () => {
-        expect(multiply(2, 3)).toBe(6);
-        expect(multiply(-1, 5)).toBe(-5);
-        expect(multiply(0, 0)).toBe(0);
+    it('如果传入的 UID 错误，那么 promise 链应该正确捕捉到该错误', async () => {
+        await expect(fetchUserLatestWeiboByUID('12')).rejects.toThrow('获取用户最新微博失败，因为新浪微博接口返回的 ok 状态码不为 1');
     });
 });

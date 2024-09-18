@@ -19,6 +19,8 @@ type GetIndexResponseData<T extends IndexResponseType> = T extends { kind: 'weib
         since_id: number
     }
     cards: Card[]
+    schema:string
+    showAppTips:number
 } : T extends { kind: 'init' } ? WeiboInitResponse
     : {
         fans_scheme: string
@@ -26,10 +28,13 @@ type GetIndexResponseData<T extends IndexResponseType> = T extends { kind: 'weib
     }
 
 
-interface Card {
+/**
+ * 使用本包调用接口时，相应的博文数据都封装在 Card 的 myblog 中。
+ */
+export interface Card {
     card_type: number
     commend_info?: CommendInfo[]
-    mblog?: Mblog
+    mblog: Mblog
 }
 
 interface CommendInfo {
@@ -45,7 +50,7 @@ interface CommendInfo {
     }
 }
 
-interface Mblog {
+export interface Mblog {
     visible: {
         type: number
         list_id: number
@@ -54,7 +59,12 @@ interface Mblog {
     id: string
     mid: string
     can_edit: boolean
+    region_name?:string
     text: string
+    /**
+     * 如果是转发的别人的原微博，那么在 retweeted_status 中不会包括该项
+     */
+    raw_text?: string
     source: string
     favorited: boolean
     pic_ids: string[]
@@ -68,10 +78,13 @@ interface Mblog {
     isLongText: boolean
     show_mlevel: number
     bid: string
+    retweeted_status?: Mblog
 }
 
 interface User {
+    avatar:string
     id: number
+    name:string
     screen_name: string
     profile_image_url: string
     profile_url: string
