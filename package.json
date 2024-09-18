@@ -1,6 +1,6 @@
 {
   "name": "@hk-artificial-intelligence-association/weibo-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "元狲科技封装的新浪微博API",
   "main": "./src/index.ts",
   "type": "module",
@@ -48,7 +48,6 @@
   },
   "dependencies": {
     "fp-ts": "^2.16.9",
-    "io-ts": "^2.2.21",
     "rimraf": "^6.0.1",
     "tsc-alias": "^1.8.10"
   }
