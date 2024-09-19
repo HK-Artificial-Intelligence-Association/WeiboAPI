@@ -86,6 +86,11 @@ jobs:
       if: steps.check_version.outputs.should_publish == 'true'
       run: ./publish.sh -t ${{ secrets.GITHUB_TOKEN}}
 
+    - name: Set up npmrc - npm
+      run: |
+        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+        echo "@hk-artificial-intelligence-association:registry=https://registry.npmjs.org/" >> .npmrc
+
     - name: Check if version is already published - npm
       id: check_version_npm
       run: |
@@ -100,6 +105,4 @@ jobs:
     - name: npm package publish
       if: steps.check_version_npm.outputs.should_publish == 'true'
       run: |
-        echo "registry=https://registry.npmjs.org/" >> .npmrc
-        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
         npm publish
