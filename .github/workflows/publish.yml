@@ -71,7 +71,7 @@ jobs:
     - name: Build delopy
       run: npm run build
 
-    - name: Check if version is already published
+    - name: Check if version is already published - github package
       id: check_version
       run: |
         if npm view @hk-artificial-intelligence-association/weibo-api@${{ steps.get_version.outputs.version }} version; then
@@ -82,6 +82,23 @@ jobs:
           echo "::set-output name=should_publish::true"
         fi
 
-    - name: Publish to npm
+    - name: github package publish
       if: steps.check_version.outputs.should_publish == 'true'
       run: ./publish.sh -t ${{ secrets.GITHUB_TOKEN}}
+
+    - name: Check if version is already published - npm
+      id: check_version_npm
+      run: |
+        if npm view @hk-artificial-intelligence-association/weibo-api@${{ steps.get_version.outputs.version }} version; then
+          echo "Version ${{ steps.get_version.outputs.version }} is already published."
+          echo "::set-output name=should_publish::false"
+        else
+          echo "Version ${{ steps.get_version.outputs.version }} is not published."
+          echo "::set-output name=should_publish::true"
+        fi
+
+    - name: npm package publish
+      if: steps.check_version_npm.outputs.should_publish == 'true'
+      run: |
+        echo ${{ secrets.NPM_TOKEN }} > .npmrc
+        npm publish
