@@ -100,5 +100,6 @@ jobs:
     - name: npm package publish
       if: steps.check_version_npm.outputs.should_publish == 'true'
       run: |
-        echo ${{ secrets.NPM_TOKEN }} > .npmrc
+        echo "registry=https://registry.npmjs.org/" >> .npmrc
+        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
         npm publish
