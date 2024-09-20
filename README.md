@@ -98,7 +98,17 @@ export type BaseWeiboInfo = {
   user: ParsedWeiboUserInfo
   text: string
   rawText: string
+  /**
+   * 点赞数
+   */
+  attitudesCount: number
+  /**
+   * 评论数
+   */
   commentsCount: number
+  /**
+   * 转发数
+   */
   retweetCount: number
   createdAt: string
   /**
@@ -141,6 +151,7 @@ export type WeiboInfo = OrginalWeiboInfo | RetweetWeiboInfo
   },
   text: '轉發微博',
   rawText: '轉發微博',
+  attitudesCount: 0,
   commentsCount: 0,
   retweetCount: 0,
   createdAt: 'Wed Sep 18 12:11:03 +0800 2024',
@@ -157,6 +168,7 @@ export type WeiboInfo = OrginalWeiboInfo | RetweetWeiboInfo
     },
     text: '再次读到了 OpenAI 创立之始定下的技术目标，穿透时间，仍具有很强的指引作用。稍作删减：<br /><br />《OpenAI 技术目标》，2016 年 6 月 20 日，by Ilya Sutskever、Greg Brockman、Sam Altman、Elon Musk。<br /><br />「OpenAI 的使命是建立安全的人工智能，并确保人工智能的收益尽可能广泛而均衡地分配。<br /><br />为智能下定 ...<a href="/status/5036474810502028"> 全文</a>',
     rawText: undefined,
+    attitudesCount: 0,
     commentsCount: 3,
     retweetCount: 54,
     createdAt: 'Tue May 21 14:23:51 +0800 2024',

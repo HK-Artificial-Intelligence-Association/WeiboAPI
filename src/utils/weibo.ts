@@ -87,3 +87,6 @@ export const fetchUserLatestWeiboByUIDWithoutParsed = (uid:string) =>
             (containerId:string) => weiboUserLatestWeiboFetch(uid)(containerId)
         )(opinionOfContainerId)
     ).then(extractCardInfosFromWeiboResponseBody)
+
+
+export const sampleFetchUserLatestWeiboByUID = () => fetchUserLatestWeiboByUID('5576168164')

@@ -26,10 +26,26 @@ export type ParsedWeiboUserInfo = {
 export type BaseWeiboInfo = {
   action: WeiboUserActionType
   user: ParsedWeiboUserInfo
+  /**
+   * 微博文本，包括富文本格式
+   */
   text: string
+  /**
+   * 微博原始文本
+   */
   rawText: string
+  /**
+   * 评论数
+   */
   commentsCount: number
+  /**
+   * 转发数
+   */
   retweetCount: number
+  /**
+   * 点赞数
+   */
+  attitudesCount: number
   createdAt: string
   /**
    * 博文 Id
@@ -102,6 +118,7 @@ export const parseCardInfosToWeiboInfos = (cardInfos: Card[]): WeiboInfo[] => {
           },
           text: card.mblog.text,
           rawText: card.mblog.raw_text,
+          attitudesCount: card.mblog.attitudes_count,
           commentsCount: card.mblog.comments_count,
           retweetCount: card.mblog.reposts_count,
           createdAt: card.mblog.created_at,
@@ -125,6 +142,7 @@ export const parseCardInfosToWeiboInfos = (cardInfos: Card[]): WeiboInfo[] => {
               rawText: card.mblog.retweeted_status.raw_text,
               commentsCount: card.mblog.retweeted_status.comments_count,
               retweetCount: card.mblog.retweeted_status.reposts_count,
+              attitudesCount: card.mblog.retweeted_status.attitudes_count,
               createdAt: card.mblog.retweeted_status.created_at,
               weiboId: card.mblog.retweeted_status.id,
               region: card.mblog.retweeted_status.region_name
@@ -143,6 +161,7 @@ export const parseCardInfosToWeiboInfos = (cardInfos: Card[]): WeiboInfo[] => {
               rawText: '该微博已被屏蔽',
               commentsCount: 0,
               retweetCount: 0,
+              attitudesCount: 0,
               createdAt: card.mblog.retweeted_status.created_at,
               weiboId: card.mblog.retweeted_status.id,
             }
