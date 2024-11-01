@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "type": "module",
   "author": "YuanSunTech - Wendaolee",
+  "keywords": ["新浪微博", "微博", "weibo", "weibo-api"],
   "license": "MIT",
   "repository": {
     "type": "git",
