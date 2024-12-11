@@ -1,0 +1,121 @@
+[
+    {
+        "hotScheme": "https://m.weibo.cn/p/index?containerid=106003type%3D25%26t%3D3%26disable_hot%3D1%26filter_type%3Drealtimehot&luicode=20000061&lfid=5106701843566288",
+        "appScheme": "https://m.weibo.cn?luicode=20000061&lfid=5106701843566288",
+        "callUinversalLink": false,
+        "callWeibo": false,
+        "schemeOrigin": false,
+        "appLink": "sinaweibo://detail?mblogid=5106701843566288&luicode=20000061&lfid=5106701843566288",
+        "xianzhi_scheme": "xianzhi://mblogshow?mid=5106701843566288",
+        "third_scheme": "sinaweibo://detail?mblogid=5106701843566288&luicode=20000061&lfid=5106701843566288",
+        "status": {
+            "visible": {
+                "type": 0,
+                "list_id": 0
+            },
+            "created_at": "Sun Dec 01 09:21:00 +0800 2024",
+            "id": "5106701843566288",
+            "mid": "5106701843566288",
+            "edit_count": 1,
+            "can_edit": false,
+            "edit_at": "Sun Dec 01 13:48:24 +0800 2024",
+            "text": "你说皮亚诺公设是先验的，我可以接受。<br /><br />你说加法交换律是先验的，我勉强接受。<br /><br />但无论你说 2+2=4 还是 2+2=5，我都不能直接相信，我得自己算一下。<br /><br />有些东西太复杂，我不会算，你也不会算。你要非要我相信你的答案，就有些霸道了。既然大家都算不出来，那我爱信什么信什么。<br /><br />不过这种情况我一般不会选择信什么，而是选择走着瞧。你如果真相信自己的那个答案，应该不会害怕走着瞧。你不会害怕最终看到一个不一样的答案，因为你相信那个答案是唯一的可能。除非，你其实也没那么相信。",
+            "textLength": 451,
+            "source": "微博网页版",
+            "favorited": false,
+            "pic_ids": [],
+            "is_paid": false,
+            "mblog_vip_type": 0,
+            "user": {
+                "id": 6827625527,
+                "screen_name": "t0mbkeeper",
+                "profile_image_url": "https://tvax4.sinaimg.cn/crop.0.0.502.502.180/007s41inly8h6oeyw3j8rj30dy0dy3zo.jpg?KID=imgbed,tva&Expires=1733914036&ssig=L79ORP45Ca",
+                "profile_url": "https://m.weibo.cn/u/6827625527?luicode=20000061&lfid=5106701843566288",
+                "close_blue_v": false,
+                "description": "汉语从句专家，茧房建筑师",
+                "follow_me": false,
+                "following": false,
+                "follow_count": 363,
+                "followers_count": "18.8万",
+                "cover_image_phone": "https://tva1.sinaimg.cn/crop.0.0.640.640.640/549d0121tw1egm1kjly3jj20hs0hsq4f.jpg",
+                "avatar_hd": "https://wx4.sinaimg.cn/orj480/007s41inly8h6oeyw3j8rj30dy0dy3zo.jpg",
+                "badge": {
+                    "bind_taobao": 1,
+                    "user_name_certificate": 1,
+                    "pc_new": 7,
+                    "iplocationchange_2022": 1,
+                    "comment_source": 1,
+                    "user_identity_auth": 1,
+                    "hangmu_2024": 1,
+                    "gaokao_2024": 1,
+                    "biyeji_2024": 1,
+                    "kaixueji_2024": 1
+                },
+                "statuses_count": 3066,
+                "verified": true,
+                "verified_type": 0,
+                "gender": "m",
+                "mbtype": 12,
+                "svip": 1,
+                "urank": 9,
+                "mbrank": 2,
+                "followers_count_str": "18.8万",
+                "verified_type_ext": 1,
+                "verified_reason": "互联网科技博主",
+                "like": false,
+                "like_me": false,
+                "special_follow": false
+            },
+            "reposts_count": 81,
+            "comments_count": 29,
+            "reprint_cmt_count": 0,
+            "attitudes_count": 645,
+            "mixed_count": 0,
+            "pending_approval_count": 0,
+            "isLongText": true,
+            "show_mlevel": 0,
+            "darwin_tags": [],
+            "ad_marked": false,
+            "mblogtype": 0,
+            "item_category": "status",
+            "rid": "0_0_0_163838940623450884_0_0_0",
+            "cardid": "star_1554",
+            "number_display_strategy": {
+                "apply_scenario_flag": 19,
+                "display_text_min_number": 1000000,
+                "display_text": "100万+"
+            },
+            "content_auth": 0,
+            "is_show_mixed": false,
+            "comment_manage_info": {
+                "comment_permission_type": -1,
+                "approval_comment_type": 0,
+                "comment_sort_type": 0
+            },
+            "pic_num": 0,
+            "mlevel": 0,
+            "region_name": "发布于 北京",
+            "region_opt": 1,
+            "detail_bottom_bar": 0,
+            "loyal_fans_guide_info": {
+                "guide_type": 1,
+                "guide_format": "此条微博有%s个铁粉参与互动",
+                "guide_data": "19"
+            },
+            "bid": "P2OlqeXKM",
+            "buttons": [
+                {
+                    "type": "follow",
+                    "name": "关注",
+                    "sub_type": 0,
+                    "params": {
+                        "uid": 6827625527
+                    }
+                }
+            ],
+            "status_title": "你说皮亚诺公设是先验的，我可以接受",
+            "ok": 1
+        },
+        "call": 1
+    }
+]
