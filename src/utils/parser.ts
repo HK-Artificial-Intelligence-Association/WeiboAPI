@@ -1,5 +1,5 @@
 import { Mblog, type Card, type GetIndexResponseBody, type IndexResponseType } from "@/types/api/container/getIndex.ts"
-import { type Option, fromNullable } from "fp-ts/lib/Option.js"
+import { Option } from "effect"
 
 export function multiply(a: number, b: number) {
   return a * b
@@ -89,9 +89,11 @@ export const parseTabInfoFromInitResponseBody = (res: GetIndexResponseBody<{ kin
   }, {} as ParsedTabInfo)
 }
 
-export const extractUserWeiboContainerId = (parsedTabInfo: ParsedTabInfo): Option<ContainerId> => fromNullable(parsedTabInfo.weibo)
+export const extractUserWeiboContainerId = (parsedTabInfo: ParsedTabInfo): Option.Option<ContainerId> => 
+  Option.fromNullable(parsedTabInfo.weibo)
 
-export const extractCardInfosFromWeiboResponseBody = (res: GetIndexResponseBody<{ kind: 'weibo' }>): Option<Card[]> => fromNullable(res.data.cards)
+export const extractCardInfosFromWeiboResponseBody = (res: GetIndexResponseBody<{ kind: 'weibo' }>): Option.Option<Card[]> => 
+  Option.fromNullable(res.data.cards)
 
 export const isWeiboBeBlocked = (weibo: Mblog): boolean => weibo.visible.list_id != 0
 
