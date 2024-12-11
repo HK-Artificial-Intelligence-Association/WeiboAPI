@@ -20,7 +20,11 @@ npm install @hk-artificial-intelligence-association/weibo-api@latest
 
 ## 1. 使用示例
 
-目前，对于通常的需求而言，仅提供了获取指定微博用户前十条最新微博的 API 函数 `fetchUserLatestWeiboByUID` :
+目前，对于通常的需求而言:
+- 提供了获取指定微博用户前十条最新微博的 API 函数 `fetchUserLatestWeiboByUID` :
+- 提供了获取指定微博用户前十条最新微博的 API 函数 `fetchUserLatestWeiboByUIDWithoutParsed` :
+- 提供了搜索指定用户的 UID 的 API 函数 `searchForUserUID` :
+
 
 ```typescript
 import {
@@ -62,6 +66,18 @@ function parseCards(cards: Card[]) {
   const weiboInfos: WeiboInfo[] = parseCardInfosToWeiboInfos(cards)
   console.log('解析后的微博信息:', weiboInfos)
 }
+
+// 获得指定用户名的 UID
+function searchForUserUID(username: string) {
+  const uid = searchForUserUID(username)
+  if(uid === null) {
+    console.log('搜索不到该用户')
+  } else {
+    console.log('搜索到的用户 UID:', uid)
+  }
+}
+
+
 ```
 
 ## 2. UID 的获取
