@@ -1,13 +1,14 @@
 import { type Card, type GetIndexResponseBody } from "@/types/api/container/getIndex.ts"
 import { parseTabInfoFromInitResponseBody, extractUserWeiboContainerId, extractCardInfosFromWeiboResponseBody, parseCardInfosToWeiboInfos, WeiboInfo } from "./parser.ts"
-import { match } from "fp-ts/lib/Option.js"
+import { Effect, Option } from "effect"
+import { ofetch } from "ofetch"
 
 /**
  * 匹配 fetch 错误
  * @param e 
  * @returns 
  */
-export const matchFetchError = (e:Error):Error =>{
+export const matchFetchError = (e:Error | unknown):Error =>{
     if (e instanceof TypeError) {
         return new Error(`fetch错误 - TypeError -网络故障或CORS配置错误: ${e.message}`)
     }
@@ -30,26 +31,39 @@ export const isWeiboFetchSuccess = (res:GetIndexResponseBody<{ kind:'init' }> | 
  * @param uid 
  * @returns 
  */
-export const weiboUserContainerIdFetch = (uid:string):Promise<GetIndexResponseBody<{ kind:'init' }>> => fetch(`https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}`,{
-    method:'GET',
-    headers:{
-        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        'Referer':`https://m.weibo.cn/u/${uid}`,
+export const weiboUserContainerIdFetch = (uid: string) => Effect.tryPromise({
+  try: async () => ofetch<GetIndexResponseBody<{ kind: 'init' }>>(`https://m.weibo.cn/api/container/getIndex`, {
+    query: {
+      type: 'uid',
+      value: uid
+    },
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+      'Referer': `https://m.weibo.cn/u/${uid}`
     }
-}).then(res=>res.json()).catch(matchFetchError)
+  }),
+  catch: matchFetchError
+})
 
 /**
  * 返回用于获取用户的最新微博的 fetch
  * @param uid 
  * @returns 
  */
-export const weiboUserLatestWeiboFetch = (uid:string) => (containerId:string):Promise<GetIndexResponseBody<{ kind:'weibo' }>> => fetch(`https://m.weibo.cn/api/container/getIndex?type=uid&value=${uid}&containerid=${containerId}`,{
-    method:'GET',
-    headers:{
-        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        'Referer':`https://m.weibo.cn/u/${uid}`,
+export const weiboUserLatestWeiboFetch = (uid: string) => (containerId: string) => Effect.tryPromise({
+  try: () => ofetch<GetIndexResponseBody<{ kind: 'weibo' }>>(`https://m.weibo.cn/api/container/getIndex`, {
+    query: {
+      type: 'uid',
+      value: uid,
+      containerid: containerId
+    },
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+      'Referer': `https://m.weibo.cn/u/${uid}`
     }
-}).then(res=>res.json()).catch(matchFetchError)
+  }),
+  catch: matchFetchError
+})
 
 export const sampleFetchWeiboUserContainerData = () => weiboUserContainerIdFetch('5576168164')
 
@@ -58,35 +72,50 @@ export const sampleFetchWeiboUserContainerData = () => weiboUserContainerIdFetch
  * @param uid 
  * @returns {Promise<WeiboInfo[]>} 返回解析的 WeiboInfo
  */
-export const fetchUserLatestWeiboByUID = (uid:string):Promise<WeiboInfo[]> => 
-    fetchUserLatestWeiboByUIDWithoutParsed(uid)
-    .then(
-        (opinionOfCardInfos) => match(
-            () => Promise.reject(new Error('获取 cardInfos 失败')),
-            (cardInfos:Card[]) => Promise.resolve(parseCardInfosToWeiboInfos(cardInfos)).catch(
-                () => Promise.reject(new Error('解析 cardInfos 失败'))
-            )
-        )(opinionOfCardInfos)
-    )
+export const fetchUserLatestWeiboByUID = (uid: string): Effect.Effect<WeiboInfo[], Error, never > => 
+  Effect.gen(function* () {
+    // 获取原始的卡片数据
+    const cardInfosOption = yield* weiboUserContainerIdFetch(uid)
+    const isSuccess = isWeiboFetchSuccess(cardInfosOption)
+    if(!isSuccess){
+        return yield* Effect.fail(new Error('获取用户最新微博失败，因为新浪微博接口返回的 ok 状态码不为 1'))
+    }
+    const parsedTabInfo = parseTabInfoFromInitResponseBody(cardInfosOption)
+    const extractedResult = extractUserWeiboContainerId(parsedTabInfo)
+    if(Option.isNone(extractedResult)){
+        return yield* Effect.fail(new Error('获取用户最新微博失败，因为新浪微博接口返回的 ok 状态码不为 1'))
+    }
+    const containerId = extractedResult.value
+    const weiboResponse = yield* weiboUserLatestWeiboFetch(uid)(containerId)
+    const cardInfos = extractCardInfosFromWeiboResponseBody(weiboResponse)
+    const result = parseCardInfosToWeiboInfos(Option.getOrElse(cardInfos, () => []))
+    return result
+  })
 
 /**
  * 获取用户的最新十条博文的卡片数据（一般是10条，但不保证，会随着接口变动而更改），但是不进行解析
  * @param uid 
  * @returns 
  */
-export const fetchUserLatestWeiboByUIDWithoutParsed = (uid:string) => 
-    weiboUserContainerIdFetch(uid)
-    .then(
-        (res) => isWeiboFetchSuccess(res) ? Promise.resolve(res) : Promise.reject(new Error('获取用户最新微博失败，因为新浪微博接口返回的 ok 状态码不为 1'))
-    )
-    .then(parseTabInfoFromInitResponseBody)
-    .then(extractUserWeiboContainerId)
-    .then(
-        (opinionOfContainerId) => match(
-            () => Promise.reject(new Error('获取 containerId 失败')),
-            (containerId:string) => weiboUserLatestWeiboFetch(uid)(containerId)
-        )(opinionOfContainerId)
-    ).then(extractCardInfosFromWeiboResponseBody)
+export const fetchUserLatestWeiboByUIDWithoutParsed = (uid: string) => 
+  Effect.gen(function* () {
+    const initResponse = yield* weiboUserContainerIdFetch(uid)
+    
+    if (!isWeiboFetchSuccess(initResponse)) {
+      return yield* Effect.fail(new Error('获取用户最新微博失败，因为新浪微博接口返回的 ok 状态码不为 1，这个状态码是正常获取下应该具备的状态码'))
+    }
+
+    const tabInfo = parseTabInfoFromInitResponseBody(initResponse)
+    const containerIdOption = extractUserWeiboContainerId(tabInfo)
+    
+    const containerId = Option.getOrNull(containerIdOption)
+    if(containerId === null){
+        return yield* Effect.fail(new Error('获取 containerId 失败'))
+    }
+    const weiboResponse = yield* weiboUserLatestWeiboFetch(uid)(containerId)
+    
+    return extractCardInfosFromWeiboResponseBody(weiboResponse)
+  })
 
 
 export const sampleFetchUserLatestWeiboByUID = () => fetchUserLatestWeiboByUID('5576168164')
