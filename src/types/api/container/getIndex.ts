@@ -60,6 +60,10 @@ export interface Mblog {
     mid: string
     can_edit: boolean
     region_name?:string
+    /**
+     * 包含 html 标签的博文内容
+     * 请注意，在博文详情页接口中，它才会是完整的原文
+     */
     text: string
     /**
      * 如果是转发的别人的原微博，那么在 retweeted_status 中不会包括该项
