@@ -181,3 +181,13 @@ export const parseCardInfosToWeiboInfos = (cardInfos: Card[]): WeiboInfo[] => {
     })
     .filter(Boolean) as WeiboInfo[]
 }
+
+/**
+ * 判断微博文本是否是全文
+ * @param text 微博文本
+ * @returns 如果是全文返回 true，否则返回 false
+ */
+export const isFetchedWeiboTextWereFullText = (text: string): boolean => {
+  const fullTextPattern = /<a href="\/status\/\d+">全文<\/a>/
+  return !fullTextPattern.test(text)
+}

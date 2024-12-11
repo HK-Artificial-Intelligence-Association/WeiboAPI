@@ -1,7 +1,8 @@
 import { type Card, type GetIndexResponseBody } from "@/types/api/container/getIndex.ts"
-import { parseTabInfoFromInitResponseBody, extractUserWeiboContainerId, extractCardInfosFromWeiboResponseBody, parseCardInfosToWeiboInfos, WeiboInfo } from "./parser.ts"
+import { parseTabInfoFromInitResponseBody, extractUserWeiboContainerId, extractCardInfosFromWeiboResponseBody, parseCardInfosToWeiboInfos, WeiboInfo, RetweetWeiboInfo } from "./parser.ts"
 import { Effect, Option } from "effect"
 import { ofetch } from "ofetch"
+import { fetchBlogFullContent, fetchBlogFullContentEffect } from "./tweet/blogContent.ts"
 
 /**
  * 匹配 fetch 错误
@@ -76,13 +77,7 @@ export const weiboUserLatestWeiboFetch = (uid: string) => (containerId: string) 
 
 export const sampleFetchWeiboUserContainerData = () => weiboUserContainerIdFetchEffect('5576168164')
 
-/**
- * 根据用户的 UUID 获取用户的最新十条博文（一般是10条，但不保证，会随着接口变动而更改）
- * @param uid 
- * @returns {Promise<WeiboInfo[]>} 返回解析的 WeiboInfo
- */
-export const fetchUserLatestWeiboByUID = (uid: string) =>
-    Effect.runPromise(
+export const fetchUserLatestWeiboByUIDEffect = (uid: string) =>
         Effect.gen(function* () {
             // 获取原始的卡片数据
             const cardInfosOption = yield* weiboUserContainerIdFetchEffect(uid)
@@ -101,14 +96,17 @@ export const fetchUserLatestWeiboByUID = (uid: string) =>
             const result = parseCardInfosToWeiboInfos(Option.getOrElse(cardInfos, () => []))
             return result
         })
-    )
 
 /**
- * 获取用户的最新十条博文的卡片数据（一般是10条，但不保证，会随着接口变动而更改），但是不进行解析
+ * 根据用户的 UUID 获取用户的最新十条解析后的博文（一般是10条，但不保证，会随着接口变动而更改）
+ * 请注意，该函数获得的博文 text 字段不一定是博文的原文。过长的原文会被截断。
  * @param uid 
- * @returns 
+ * @returns {Promise<WeiboInfo[]>} 返回解析的 WeiboInfo
  */
-export const fetchUserLatestWeiboByUIDWithoutParsed = (uid: string) => Effect.runPromise(
+export const fetchUserLatestWeiboByUID = (uid: string) =>
+    Effect.runPromise(fetchUserLatestWeiboByUIDEffect(uid))
+
+const fetchUserLatestWeiboByUIDWithoutParsedEffect = (uid: string) =>
     Effect.gen(function* () {
         const initResponse = yield* weiboUserContainerIdFetchEffect(uid)
 
@@ -127,7 +125,42 @@ export const fetchUserLatestWeiboByUIDWithoutParsed = (uid: string) => Effect.ru
 
         const optionResult = extractCardInfosFromWeiboResponseBody(weiboResponse)
         return Option.getOrNull(optionResult)
-    }))
+    })
+
+/**
+ * 获取用户的最新十条博文的卡片数据（一般是10条，但不保证，会随着接口变动而更改），但是不进行解析
+ * @param uid 
+ * @returns 
+ */
+export const fetchUserLatestWeiboByUIDWithoutParsed = (uid: string) => Effect.runPromise(fetchUserLatestWeiboByUIDWithoutParsedEffect(uid))
 
 
-export const sampleFetchUserLatestWeiboByUID = () => fetchUserLatestWeiboByUID('5576168164')
+/**
+ * 获取用户的最新十条博文，并确保博文内容是完整的
+ * @param uid 
+ * @returns 
+ */
+export const fetchUserLatestWeiboByUIDEnsureFullTexted = (uid: string) => Effect.runPromise(
+    Effect.gen(function* () {
+        const weiboInfos = yield* fetchUserLatestWeiboByUIDEffect(uid)
+
+        /**
+         * 因为是引用传递，因此能够正确修改 weiboInfos 中的博文内容
+         */
+        for (const signleWeiboInfo of weiboInfos) {
+            const blogId = signleWeiboInfo.weiboId
+            const fullContent = yield* fetchBlogFullContentEffect(blogId)
+            if (fullContent === null) {
+                return yield* Effect.fail(new Error('获取博文全文失败'))
+            }
+            signleWeiboInfo.text = fullContent.thePostText
+            if (fullContent.theRetweetedText !== undefined) {
+                (signleWeiboInfo as RetweetWeiboInfo).retweetedWeibo.text = fullContent.theRetweetedText
+            }
+        }
+
+        return weiboInfos
+    })
+)
+
+// const d = await fetchUserLatestWeiboByUIDEnsureFullTexted('7797535872')
