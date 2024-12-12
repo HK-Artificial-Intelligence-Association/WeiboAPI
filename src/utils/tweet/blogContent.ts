@@ -40,13 +40,25 @@ export const fetchBlogRenderData = (blogId: string) => Effect.runPromise(fetchBl
  */
 const getBlogTrueContent = (renderData: RenderData) => {
     const thePostText = renderData[0].status.text
+    const thePostId = renderData[0].status.id
+    const thePostUserInfo = renderData[0].status.user
+    const thePostMetaData = renderData[0].status
     /**
      * 如果博文是转发别人的博文，那么被转发的博文内容会包含在 retweeted_status 中
      */
     const theRetweetedText = renderData[0].status?.retweeted_status?.text
+    const theRetweetedPostId = renderData[0].status?.retweeted_status?.id
+    const theRetweetedPostUserInfo = renderData[0].status?.retweeted_status?.user
+    const theRetweetedPostMetaData = renderData[0].status?.retweeted_status
     return {
         thePostText,
-        theRetweetedText
+        theRetweetedText,
+        thePostId,
+        theRetweetedPostId,
+        thePostUserInfo,
+        theRetweetedPostUserInfo,
+        thePostMetaData,
+        theRetweetedPostMetaData
     }
 }
 
