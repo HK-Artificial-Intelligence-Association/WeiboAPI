@@ -85,7 +85,7 @@ export interface Mblog {
     retweeted_status?: Mblog
 }
 
-interface User {
+export interface User {
     avatar:string
     id: number
     name:string
