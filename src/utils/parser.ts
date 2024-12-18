@@ -128,7 +128,10 @@ export const parseCardInfosToWeiboInfos = (cardInfos: Card[]): WeiboInfo[] => {
           region: card.mblog.region_name
         }
 
-        if (card.mblog?.retweeted_status && !isWeiboBeBlocked(card.mblog?.retweeted_status)) {
+        if (card.mblog?.retweeted_status && !isWeiboBeBlocked(card.mblog?.retweeted_status) && card.mblog?.retweeted_status.user != null) {
+          if(card.mblog.retweeted_status.user === null){
+            return null
+          }
           return {
             ...baseInfo,
             action: 'retweet' as const,

@@ -111,7 +111,7 @@ const fetchUserLatestWeiboByUIDWithoutParsedEffect = (uid: string) =>
         const initResponse = yield* weiboUserContainerIdFetchEffect(uid)
 
         if (!isWeiboFetchSuccess(initResponse)) {
-            return yield* Effect.fail(new Error('获取用户最新微博失败，因为新浪微博接口返回的 ok 状态码不为 1，这个状态码是正常获取下应该具备的状态码'))
+            return yield* Effect.fail(new Error('获取用户最新微博失败，因为新浪微博接口返回的 ok 状态码不为 1，这个状态码是正常获��下应该具备的状态码'))
         }
 
         const tabInfo = parseTabInfoFromInitResponseBody(initResponse)
@@ -155,7 +155,9 @@ export const fetchUserLatestWeiboByUIDEnsureFullTexted = (uid: string) => Effect
             }
             signleWeiboInfo.text = fullContent.thePostText
             if (fullContent.theRetweetedText !== undefined) {
-                (signleWeiboInfo as RetweetWeiboInfo).retweetedWeibo.text = fullContent.theRetweetedText
+                 if ('retweetedWeibo' in signleWeiboInfo && signleWeiboInfo.retweetedWeibo) {
+                    signleWeiboInfo.retweetedWeibo.text = fullContent.theRetweetedText
+                }
             }
         }
 
