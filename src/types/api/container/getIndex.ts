@@ -9,6 +9,24 @@ export interface GetIndexResponseBody<T extends IndexResponseType> {
  */
 export type IndexResponseType = { kind: 'init' } | { kind: 'profile' } | { kind: 'weibo' } | { kind: 'original_video' } | { kind: 'album' }
 
+/**
+ * 在微博存在图片时，才会出现该类型的字段，字段名为 pics
+ */
+export type Pic = {
+    pid:string
+    /**
+     * 如果是 large，那么 url 是高清图;如果是 orj369，那么 url 是对应缩略图
+     */
+    size:string
+    url:string
+    large:Pic
+    geo:{
+        width:number
+        height:number
+        croped:boolean
+    }
+}
+
 type GetIndexResponseData<T extends IndexResponseType> = T extends { kind: 'weibo' } ? {
     cardlistInfo: {
         containerid: string
@@ -72,6 +90,10 @@ export interface Mblog {
     source: string
     favorited: boolean
     pic_ids: string[]
+    /**
+     * 如果存在图片，那么该字段存在
+     */
+    pics: Pic[]
     is_paid: boolean
     mblog_vip_type: number
     user: User

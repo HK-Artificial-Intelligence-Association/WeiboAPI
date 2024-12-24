@@ -104,6 +104,25 @@ function searchForUserUID(username: string) {
  */
 export type WeiboUserActionType = 'tweet' | 'retweet'
 
+
+/**
+ * 在微博存在图片时，才会出现该类型的字段，字段名为 pics
+ */
+export type Pic = {
+    pid:string
+    /**
+     * 如果是 large，那么 url 是高清图;如果是 orj369，那么 url 是对应缩略图
+     */
+    size:string
+    url:string
+    large:Pic
+    geo:{
+        width:number
+        height:number
+        croped:boolean
+    }
+}
+
 export type ParsedWeiboUserInfo = {
   id: number,
   name: string,
@@ -137,6 +156,10 @@ export type BaseWeiboInfo = {
    * 发微博的Ip定位
    */
   region?: string
+  /**
+   * 微博图片，如果不存在图片，那么该解析字段的结果是空数组
+   */
+  pics: Pic[]
 }
 
 /**

@@ -1,4 +1,4 @@
-import { Mblog, type Card, type GetIndexResponseBody, type IndexResponseType } from "@/types/api/container/getIndex.ts"
+import { Mblog, Pic, type Card, type GetIndexResponseBody, type IndexResponseType } from "@/types/api/container/getIndex.ts"
 import { Option } from "effect"
 
 export function multiply(a: number, b: number) {
@@ -26,6 +26,10 @@ export type ParsedWeiboUserInfo = {
 export type BaseWeiboInfo = {
   action: WeiboUserActionType
   user: ParsedWeiboUserInfo
+  /**
+   * 微博图片
+   */
+  pics?: Pic[]
   /**
    * 微博文本，包括富文本格式
    */
@@ -125,7 +129,8 @@ export const parseCardInfosToWeiboInfos = (cardInfos: Card[]): WeiboInfo[] => {
           retweetCount: card.mblog.reposts_count,
           createdAt: card.mblog.created_at,
           weiboId: card.mblog.id,
-          region: card.mblog.region_name
+          region: card.mblog.region_name,
+          pics:card.mblog.pics ?? []
         }
 
         if (card.mblog?.retweeted_status && !isWeiboBeBlocked(card.mblog?.retweeted_status) && card.mblog?.retweeted_status.user != null) {
