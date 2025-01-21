@@ -148,6 +148,7 @@ export const parseCardInfosToWeiboInfos = (cardInfos: Card[]): WeiboInfo[] => {
                 avatar: card.mblog.retweeted_status.user.avatar_hd,
                 description: card.mblog.retweeted_status.user.description
               },
+              pics: card.mblog.retweeted_status.pics ?? [],
               text: card.mblog.retweeted_status.text,
               rawText: card.mblog.retweeted_status.raw_text,
               commentsCount: card.mblog.retweeted_status.comments_count,
@@ -174,6 +175,7 @@ export const parseCardInfosToWeiboInfos = (cardInfos: Card[]): WeiboInfo[] => {
               attitudesCount: 0,
               createdAt: card.mblog.retweeted_status.created_at,
               weiboId: card.mblog.retweeted_status.id,
+              pics: card.mblog.retweeted_status.pics ?? []
             }
           }
         }
