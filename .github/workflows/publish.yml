@@ -59,7 +59,7 @@ jobs:
       run: chmod +x ./npmrc-set-up.sh
 
     - name: Set up npmrc
-      run: ./npmrc-set-up.sh -t ${{ secrets.GITHUB_TOKEN }} -p weibo-api -o hk-artificial-intelligence-association
+      run: ./npmrc-set-up.sh -t ${{ secrets.GITHUB_TOKEN }} -p weibo-api -o hkai-ai
 
     - name: Get package version
       id: get_version
@@ -75,7 +75,7 @@ jobs:
     - name: Check if version is already published - npm
       id: check_version_npm
       run: |
-        if npm view @hk-artificial-intelligence-association/weibo-api@${{ steps.get_version.outputs.version }} version; then
+        if npm view @hkai-ai/weibo-api@${{ steps.get_version.outputs.version }} version; then
           echo "Version ${{ steps.get_version.outputs.version }} is already published."
           echo "::set-output name=should_publish::false"
         else
@@ -91,7 +91,7 @@ jobs:
     - name: Check if version is already published - github package
       id: check_version
       run: |
-        if npm view @hk-artificial-intelligence-association/weibo-api@${{ steps.get_version.outputs.version }} version; then
+        if npm view @hkai-ai/weibo-api@${{ steps.get_version.outputs.version }} version; then
           echo "Version ${{ steps.get_version.outputs.version }} is already published."
           echo "::set-output name=should_publish::false"
         else
@@ -106,4 +106,4 @@ jobs:
     - name: Set up npmrc - npm
       run: |
         echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
-        echo "@hk-artificial-intelligence-association:registry=https://registry.npmjs.org/" >> .npmrc
+        echo "@hkai-ai:registry=https://registry.npmjs.org/" >> .npmrc
