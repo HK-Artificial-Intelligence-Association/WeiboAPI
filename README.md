@@ -4,18 +4,18 @@
 
 ## 0. 安装
 
-> Note: 目前该包已同步发布至 npm registry，因此您可以直接使用 `npm install @hk-artificial-intelligence-association/weibo-api` 进行安装。
+> Note: 目前该包已同步发布至 npm registry，因此您可以直接使用 `npm install @hkai-ai/weibo-api` 进行安装。
 
 目前该 package 存放在 github 的 npm registry 下，因此在安装时，您需要在您的项目目录里添加 `.npmrc` 文件，并且添加以下行：
 
 ```.npmrc
-@hk-artificial-intelligence-association:registry=https://npm.pkg.github.com/
+@hkai-ai:registry=https://npm.pkg.github.com/
 ```
 
 而后运行：
 
 ```bash
-npm install @hk-artificial-intelligence-association/weibo-api@latest
+npm install @hkai-ai/weibo-api@latest
 ```
 
 ## 1. 使用示例

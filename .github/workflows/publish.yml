@@ -71,6 +71,11 @@ jobs:
     - name: Build delopy
       run: npm run build
 
+    - name: Set up npmrc - npm
+      run: |
+        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+        echo "@hkai-ai:registry=https://registry.npmjs.org/" >> .npmrc
+
 
     - name: Check if version is already published - npm
       id: check_version_npm
@@ -102,8 +107,3 @@ jobs:
     - name: github package publish
       if: steps.check_version.outputs.should_publish == 'true'
       run: ./publish.sh -t ${{ secrets.GITHUB_TOKEN}}
-
-    - name: Set up npmrc - npm
-      run: |
-        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
-        echo "@hkai-ai:registry=https://registry.npmjs.org/" >> .npmrc
