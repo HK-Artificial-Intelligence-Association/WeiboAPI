@@ -92,12 +92,9 @@ jobs:
       run: |
         npm publish
 
-    
     - name: Set up npmrc - github package
-      run: |
-        echo "//registry.npmjs.org/:_authToken=${{ secrets.GITHUB_TOKEN }}" > .npmrc
-        echo "@hkai-ai:registry=https://npm.pkg.github.com/" >> .npmrc
-
+      run: ./npmrc-set-up.sh -t ${{ secrets.GITHUB_TOKEN }} -p weibo-api -o hkai-ai
+    
     - name: Check if version is already published - github package
       id: check_version
       run: |
